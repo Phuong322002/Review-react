@@ -3,6 +3,8 @@ import './App.scss';
 import TodoComponent from '../components/Todo/TodoComponent';
 import Navigaton from '../components/Navigation/Navigation';
 import HomePage from '../components/HomePage/Home';
+import UserComponent from '../components/User/UserCompnent';
+import DetailCoponent from '../components/User/DetailComponent';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,6 +28,12 @@ function App() {
         </Route>
         <Route path="/todo">
         <TodoComponent/>
+        </Route>
+        <Route path="/user" exact={true}>
+          <UserComponent/>
+        </Route>
+        <Route path='/user/:id'>
+        <DetailCoponent/>
         </Route>
        </Switch>
       </header>
