@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 class HomePage extends React.Component {
 
     state = {
-        editTitle: {}
+        editTitle: {},
+        course: ''
     }
 
     // componentDidMount() {
@@ -22,6 +23,7 @@ class HomePage extends React.Component {
         console.log('>>>Check user delete: ', this.props)
         console.log('>>> Check user: ', title)
         this.props.deleteTitle(title)
+        toast.success('Delete successfull')
     }
 
     // handleEdit = (user) => {
@@ -38,6 +40,7 @@ class HomePage extends React.Component {
     // }
 
     handleEdit = (user) => {
+        console.log('gg', this.state.editTitle)
         const { editRedux } = this.props;
         console.log('editRedux.id11', editRedux)
         console.log('user.id', user.id)
@@ -47,8 +50,12 @@ class HomePage extends React.Component {
                 editTitle: user
             })
             this.props.EditTitle(user);
+        } else if (this.state.editTitle.course === "") {
+            toast.error('Missing value')
+            return;
         } else {
-            this.props.saveTitle(user); // Gọi action SAVE_TITLE khi đang chỉnh sửa và click "Save"
+            this.props.saveTitle(); // Gọi action SAVE_TITLE khi đang chỉnh sửa và click "Save"
+            toast.success('Edit SuccessFull')
         }
     }
 
@@ -63,6 +70,24 @@ class HomePage extends React.Component {
         console.log('editTitleCopy11', editTitle)
     }
 
+    handleInputAdd = (event) => {
+        this.setState({
+            course: event.target.value
+        })
+    }
+
+    handleAdd = () => {
+        if (this.state.course === '') {
+            toast.error('Missing value')
+            return;
+        }
+        this.props.CreateTitle({ id: Math.floor(Math.random() * 1000), course: this.state.course })
+        this.setState({
+            course: ''
+        })
+        toast.success('Add successfull')
+    }
+
 
     render() {
         let { editTitle } = this.state
@@ -74,6 +99,7 @@ class HomePage extends React.Component {
         return (
             <div className="container">
                 <div className="title">List Title</div>
+                <div className="add-title"><input type="text" value={this.state.course} onChange={(e) => { this.handleInputAdd(e) }} /><></> <button onClick={() => { this.handleAdd() }}>Add</button></div>
                 <div className="title-list-content">
                     {this.props.dataRedux && this.props.dataRedux.length > 0 && this.props.dataRedux.map((item, index) => {
                         return (
@@ -81,7 +107,7 @@ class HomePage extends React.Component {
                                 <div className="child" key={item.id}>
                                     {isEmptyObj === true
                                         ?
-                                        <span> {index + 1} - {item.course}</span>
+                                        <span> {index + 1} - {item.course} <></></span>
                                         :
                                         <>
                                             {this.props.editRedux.id === item.id
@@ -123,7 +149,8 @@ const mapDispathToProps = (dispath) => {
     return {
         deleteTitle: (titleDelete) => { return dispath({ type: 'DELETE_USER', payload: titleDelete }) },
         EditTitle: (titleEdit) => { return dispath({ type: 'EDIT_TITLE', payload: titleEdit }) },
-        saveTitle: (titleSave) => { return dispath({ type: 'SAVE_TITLE', payload: titleSave }) }
+        saveTitle: () => { return dispath({ type: 'SAVE_TITLE' }) },
+        CreateTitle: (newtitle) => { return dispath({ type: 'CREATE_TITLE', payload: newtitle }) }
     }
 }
 

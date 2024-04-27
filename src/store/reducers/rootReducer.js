@@ -56,6 +56,12 @@ let titleCopy = [...state.title]
         case "SAVE_TITLE":
             return { ...state, editTitle: {} }; // Trả về editTitle rỗng sau khi lưu
     
+        case "CREATE_TITLE":
+            console.log('ac', action)
+            let getTitle = [...state.title, action.payload]
+        return {
+            ...state, title: getTitle
+        }
 
     default:
         return state;
